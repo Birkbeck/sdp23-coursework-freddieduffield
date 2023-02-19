@@ -4,6 +4,12 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+
+/**
+ * Class that provides functionality for the opcode <b>div</b>
+ * The instruction will perform a division operation
+ * @author freddie duffield
+ */
 public class DivInstruction extends Instruction {
     private final RegisterName result;
     private final RegisterName source;
