@@ -1,9 +1,6 @@
 package sml.instruction;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import sml.Instruction;
 import sml.Machine;
 import sml.Registers;
@@ -27,12 +24,24 @@ public class SubInstructionTest {
     }
 
     @Test
+    @DisplayName("8 - 7 = 1")
     void executeValid() {
         registers.set(EAX, 8);
         registers.set(EBX, 7);
         Instruction instruction = new SubInstruction(null, EAX, EBX);
         instruction.execute(machine);
         Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+    }
+
+    @Test
+    @DisplayName("-8 - 7 = -15")
+    void executeValid2() {
+        registers.set(EAX, -8);
+        registers.set(EBX, 7);
+        Instruction instruction = new SubInstruction(null, EAX, EBX);
+        instruction.execute(machine);
+        Assertions.assertEquals(-15, machine.getRegisters().get(EAX));
+
     }
 
 }
