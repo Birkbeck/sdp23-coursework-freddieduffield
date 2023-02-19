@@ -48,4 +48,9 @@ public class AddInstruction extends Instruction {
 
 		return false;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(result, source);
+	}
 }

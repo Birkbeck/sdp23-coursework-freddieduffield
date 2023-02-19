@@ -57,4 +57,7 @@ public abstract class Instruction {
 	@Override
 	public abstract boolean equals(Object obj);
 
+	@Override
+	public abstract int hashCode();
+
 }

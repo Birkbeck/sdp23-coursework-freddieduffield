@@ -45,4 +45,9 @@ public class MovInstruction extends Instruction {
 
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(register, value);
+    }
 }
