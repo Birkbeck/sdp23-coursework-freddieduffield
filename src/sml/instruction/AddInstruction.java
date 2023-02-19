@@ -5,7 +5,7 @@ import sml.Machine;
 import sml.RegisterName;
 
 /**
- * Class that provides functional for the opcode <b>add</b>
+ * Class that provides functionality for the opcode <b>add</b>
  * The instruction will perform an addition operation
  * @author freddie duffield
  */

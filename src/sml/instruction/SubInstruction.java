@@ -5,8 +5,8 @@ import sml.Machine;
 import sml.RegisterName;
 
 /**
- * Class that provides functional for the opcode <b>subtract</b>
- * The instruction will perform an subtraction operation
+ * Class that provides functionality for the opcode <b>subtract</b>
+ * The instruction will perform a subtraction operation
  * @author freddie duffield
  */
 public class SubInstruction extends Instruction {

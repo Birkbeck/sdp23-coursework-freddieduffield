@@ -4,6 +4,9 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+/**
+ *
+ */
 public class MulInstruction extends Instruction {
     private final RegisterName result;
     private final RegisterName source;
