@@ -4,10 +4,10 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
-// TODO: write a JavaDoc for the class
-
 /**
- * @author
+ * Class that provides functional for the opcode <b>add</b>
+ * The instruction will perform an addition operation
+ * @author freddie duffield
  */
 
 public class AddInstruction extends Instruction {
