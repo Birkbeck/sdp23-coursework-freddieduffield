@@ -4,6 +4,8 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+import java.util.Objects;
+
 public class OutInstruction extends Instruction {
     private final RegisterName source;
 
@@ -24,5 +26,16 @@ public class OutInstruction extends Instruction {
     @Override
     public String toString() {
         return "Print contents of register -> " + source;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof OutInstruction ins) {
+            return Objects.equals(this.source, ins.source)
+                    && Objects.equals(this.label, ins.label)
+                    && Objects.equals(this.opcode, ins.opcode);
+        }
+
+        return false;
     }
 }

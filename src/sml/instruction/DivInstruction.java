@@ -4,6 +4,8 @@ import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
 
+import java.util.Objects;
+
 
 /**
  * Class that provides functionality for the opcode <b>div</b>
@@ -33,5 +35,17 @@ public class DivInstruction extends Instruction {
     @Override
     public String toString() {
         return getLabelString() + getOpcode() + " " + result + " " + source;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof DivInstruction ins) {
+            return Objects.equals(this.result, ins.result)
+                    && Objects.equals(this.source, ins.source)
+                    && Objects.equals(this.label, ins.label)
+                    && Objects.equals(this.opcode, ins.opcode);
+        }
+
+        return false;
     }
 }

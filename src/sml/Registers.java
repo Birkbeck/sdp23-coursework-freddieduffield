@@ -13,7 +13,7 @@ public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
 
     public enum Register implements RegisterName {
-        EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI;
+        EAX, EBX, ECX, EDX, ESP, EBP, ESI, EDI
     }
 
     public Registers() {
@@ -49,9 +49,8 @@ public final class Registers {
     // https://docs.oracle.com/en/java/javase/14/language/pattern-matching-instanceof-operator.html
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Registers) {
-            Registers other = (Registers) o;
-            return registers.equals(other.registers);
+        if (o instanceof Registers r) {
+            return registers.equals(r.registers);
         }
         return false;
     }
@@ -66,6 +65,6 @@ public final class Registers {
         return registers.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(e -> e.getKey() + " = " + e.getValue())
-                .collect(Collectors.joining(", ", "[", "]")) ;
+                .collect(Collectors.joining(", ", "[", "]"));
     }
 }
