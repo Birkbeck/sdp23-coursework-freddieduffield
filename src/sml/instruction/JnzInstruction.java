@@ -28,7 +28,7 @@ public class JnzInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return null;
+        return "    " + getOpcode() + " " + source + " " + nextLabel;
     }
 
     @Override

@@ -45,7 +45,7 @@ public abstract class Instruction {
 	public abstract int execute(Machine machine);
 
 	protected String getLabelString() {
-		return (getLabel() == null) ? "" : getLabel() + ": ";
+		return (getLabel() == null) ? "   " : getLabel() + ": ";
 	}
 
 	// TODO: What does abstract in the declaration below mean?

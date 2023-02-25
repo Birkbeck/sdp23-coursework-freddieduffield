@@ -18,14 +18,13 @@ public class OutInstruction extends Instruction {
 
     @Override
     public int execute(Machine machine) {
-        System.out.println("Register " + source + ": ");
         System.out.println(machine.getRegisters().get(source));
-        return 0;
+        return NORMAL_PROGRAM_COUNTER_UPDATE;
     }
 
     @Override
     public String toString() {
-        return "Print contents of register -> " + source;
+        return getLabelString() + " " + getOpcode() + " " + source;
     }
 
     @Override

@@ -34,7 +34,7 @@ public class SubInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return getLabelString() + getOpcode() + " " + result + " " + source;
+        return getLabelString()+ " " + getOpcode() + " " + result + " " + source;
     }
 
     @Override
