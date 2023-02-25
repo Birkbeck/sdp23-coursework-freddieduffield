@@ -45,7 +45,7 @@ public abstract class Instruction {
 	public abstract int execute(Machine machine);
 
 	protected String getLabelString() {
-		return (getLabel() == null) ? "" : getLabel() + ": ";
+		return (getLabel() == null) ? "   " : getLabel() + ": ";
 	}
 
 	// TODO: What does abstract in the declaration below mean?
@@ -54,4 +54,10 @@ public abstract class Instruction {
 	public abstract String toString();
 
 	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine).
+	@Override
+	public abstract boolean equals(Object obj);
+
+	@Override
+	public abstract int hashCode();
+
 }
