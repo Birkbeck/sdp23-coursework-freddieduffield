@@ -1,14 +1,12 @@
 package sml;
 
-import sml.instruction.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
-
-import static sml.Registers.Register;
 
 /**
  * This class ....
@@ -52,6 +50,11 @@ public final class Translator {
         }
     }
 
+    // TODO: Then, replace the switch by using the Reflection API
+
+    // TODO: Next, use dependency injection to allow this machine class
+    //   to work with different sets of opcodes (different CPUs)
+
     /**
      * Translates the current line into an instruction with the given label
      *
@@ -66,54 +69,81 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MovInstruction.OPP_CODE -> {
-                String r = scan();
-                String v = scan();
-                return new MovInstruction(label, Register.valueOf(r), Integer.parseInt(v));
-            }
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
-            case JnzInstruction.OPP_CODE -> {
-                String s = scan();
-                String l = scan();
-                return new JnzInstruction(Register.valueOf(s), l);
-            }
+        String r = scan();
+        String s = scan();
 
-            // TODO: add code for all other types of instructions
+        String[] args = new String[]{label, r, s};
+        try {
+           Class<?> c = Class.forName(getClassNameFromOpcode(opcode));
+           Constructor[] constructors = c.getDeclaredConstructors();
+           Class<?>[] params = constructors[0].getParameterTypes();
 
-            // TODO: Then, replace the switch by using the Reflection API
+            Object[] transformedParams = convertArgumentsToParameterType(args);
 
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
+//           return (Instruction) c.newInstance(args);
+            return null;
+//        } catch (NoSuchMethodException ignored) {
+//            ignored.printStackTrace();
+//        } catch (InstantiationException ignored) {
+//            ignored.printStackTrace();
+//        } catch (IllegalAccessException ignored) {
+//            ignored.printStackTrace();
+//        } catch (InvocationTargetException ignored) {
+//            ignored.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
+        return null;
+    }
+
+    protected Object[] convertArgumentsToParameterType(String[] args) {
+        // string Register.valueOf(r)
+        // int Integer.parseInt(v)
+        Object[] convertedArgs = new Object[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if (!args[i].equals(null)) {
+                if (isInteger(args[i])) {
+                    convertedArgs[i] = Integer.parseInt(args[i]);
+                } else if (Registers.Register.valueOf(args[i]) != null) {
+                    convertedArgs[i] = Registers.Register.valueOf(args[i]);
+                } else {
+                    convertedArgs[i] = args[i];
+                }
+            } else {
+                convertedArgs[i] = args[i];
             }
         }
-        return null;
+
+        return convertedArgs;
+    }
+
+    private boolean isInteger(String str) {
+        if (str == null) {
+            return false;
+        }
+        int length = str.length();
+        if (length == 0) {
+            return false;
+        }
+        int i = 0;
+        if (str.charAt(0) == '-') {
+            if (length == 1) {
+                return false;
+            }
+            i = 1;
+        }
+        for (; i < length; i++) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    protected String getClassNameFromOpcode(String opcode) {
+        return "sml.instruction." + opcode.substring(0,1).toUpperCase() + opcode.substring(1) + "Instruction";
     }
 
 
