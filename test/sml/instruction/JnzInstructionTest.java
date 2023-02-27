@@ -22,7 +22,7 @@ public class JnzInstructionTest {
     @DisplayName("When source register > 0, moves to label address")
     void validExecution() {
         registers.set(EAX, 3);
-        Instruction instruction = new JnzInstruction(EAX, "t1");
+        Instruction instruction = new JnzInstruction(null, EAX, "t1");
         int result = instruction.execute(machine);
         Assertions.assertEquals(10, result);
     }
@@ -31,7 +31,7 @@ public class JnzInstructionTest {
     @DisplayName("When source register == 0, return normal program counter update")
     void validExecution2() {
         registers.set(EAX, 0);
-        Instruction instruction = new JnzInstruction(EAX, "t1");
+        Instruction instruction = new JnzInstruction(null, EAX, "t1");
         int result = instruction.execute(machine);
         Assertions.assertEquals(-1, result);
     }

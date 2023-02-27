@@ -67,28 +67,28 @@ public class TranslatorTest {
         Assertions.assertEquals("sml.instruction.JnzInstruction", result);
     }
 
-    @Test
-    @DisplayName("convertArgumentsToParameterType: Converts an int to string")
-    void testConvertArgumentsToParameterType1() {
-        String[] args = {"88"};
-        Object[] result = t.convertArgumentsToParameterType(args);
-        Assertions.assertEquals(88, result[0]);
-    }
-
-    @Test
-    @DisplayName("convertArgumentsToParameterType: Converts an a registerName to a Register")
-    void testConvertArgumentsToParameterType2() {
-        String[] args = {"EBX"};
-        Object[] result = t.convertArgumentsToParameterType(args);
-        Assertions.assertEquals(Registers.Register.EBX, result[0]);
-    }
-
-    @Test
-    @DisplayName("convertArgumentsToParameterType: does not convert a string that not registerName")
-    void testConvertArgumentsToParameterType3() {
-        String[] args = {"f3:"};
-        Object[] result = t.convertArgumentsToParameterType(args);
-        Assertions.assertEquals("f3:", result[0]);
-    }
+//    @Test
+//    @DisplayName("convertArgumentsToParameterType: Converts an int to string")
+//    void testConvertArgumentsToParameterType1() {
+//        String[] args = {"88"};
+//        Object[] result = t.convertArgumentsToParameterType(args);
+//        Assertions.assertEquals(88, result[0]);
+//    }
+//
+//    @Test
+//    @DisplayName("convertArgumentsToParameterType: Converts an a registerName to a Register")
+//    void testConvertArgumentsToParameterType2() {
+//        String[] args = {"EBX"};
+//        Object[] result = t.convertArgumentsToParameterType(args);
+//        Assertions.assertEquals(Registers.Register.EBX, result[0]);
+//    }
+//
+//    @Test
+//    @DisplayName("convertArgumentsToParameterType: does not convert a string that not registerName")
+//    void testConvertArgumentsToParameterType3() {
+//        String[] args = {"f3:"};
+//        Object[] result = t.convertArgumentsToParameterType(args);
+//        Assertions.assertEquals("f3:", result[0]);
+//    }
 
 }

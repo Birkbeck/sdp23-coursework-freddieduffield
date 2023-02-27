@@ -13,8 +13,8 @@ public class JnzInstruction extends Instruction {
 
     public static final String OPP_CODE = "jnz";
 
-    public JnzInstruction(Register source,  String nextLabel) {
-        super(null, OPP_CODE);
+    public JnzInstruction(String label, RegisterName source,  String nextLabel) {
+        super(label, OPP_CODE);
         this.nextLabel = nextLabel;
         this.source = source;
     }

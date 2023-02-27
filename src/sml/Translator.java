@@ -5,8 +5,12 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class ....
@@ -23,7 +27,7 @@ public final class Translator {
     private String line = "";
 
     public Translator(String fileName) {
-        this.fileName =  fileName;
+        this.fileName = fileName;
     }
 
     // translate the small program in the file into lab (the labels) and
@@ -50,8 +54,6 @@ public final class Translator {
         }
     }
 
-    // TODO: Then, replace the switch by using the Reflection API
-
     // TODO: Next, use dependency injection to allow this machine class
     //   to work with different sets of opcodes (different CPUs)
 
@@ -72,80 +74,66 @@ public final class Translator {
         String r = scan();
         String s = scan();
 
-        String[] args = new String[]{label, r, s};
+//      inputs: Reads from file / arguments
+//      String label
+//      String opcode
+//      String registerName
+//      String registerName or String number or String label
+
+//      Constructor Params
+//      1st param: String label (no conversion required)
+//      2nd param: RegisterName
+//      3rd param: null or String label or Int number
+
         try {
-           Class<?> c = Class.forName(getClassNameFromOpcode(opcode));
-           Constructor[] constructors = c.getDeclaredConstructors();
-           Class<?>[] params = constructors[0].getParameterTypes();
+            Class<Instruction> insClass;
+            insClass = (Class<Instruction>) Class.forName(getClassNameFromOpcode(opcode));
+            Constructor<?> constructor = insClass.getDeclaredConstructors()[0];
 
-            Object[] transformedParams = convertArgumentsToParameterType(args);
+            var registerParam = Registers.Register.valueOf(r);
+            var thirdParam = getOptionalThirdParam(s, constructor.getParameterTypes());
+            Object[] args = {label, registerParam, thirdParam};
 
-//           return (Instruction) c.newInstance(args);
-            return null;
-//        } catch (NoSuchMethodException ignored) {
-//            ignored.printStackTrace();
-//        } catch (InstantiationException ignored) {
-//            ignored.printStackTrace();
-//        } catch (IllegalAccessException ignored) {
-//            ignored.printStackTrace();
-//        } catch (InvocationTargetException ignored) {
-//            ignored.printStackTrace();
-        } catch (ClassNotFoundException e) {
+            System.out.println("------------------");
+            System.out.println(constructor.getName());
+            // still not quite open to extension but closed for modification.
+            // e.g a new instruction with one param would require this code to modified.
+            if (constructor.getParameterCount() < 3) {
+                return (Instruction) constructor.newInstance(label, registerParam);
+            }
+
+            return (Instruction) constructor.newInstance(args);
+
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    protected Object[] convertArgumentsToParameterType(String[] args) {
-        // string Register.valueOf(r)
-        // int Integer.parseInt(v)
-        Object[] convertedArgs = new Object[args.length];
-        for (int i = 0; i < args.length; i++) {
-            if (!args[i].equals(null)) {
-                if (isInteger(args[i])) {
-                    convertedArgs[i] = Integer.parseInt(args[i]);
-                } else if (Registers.Register.valueOf(args[i]) != null) {
-                    convertedArgs[i] = Registers.Register.valueOf(args[i]);
-                } else {
-                    convertedArgs[i] = args[i];
-                }
-            } else {
-                convertedArgs[i] = args[i];
+    private Object getOptionalThirdParam(String s, Class<?>[] paramTypes) {
+        if (paramTypes.length > 2) {
+            Class<?> paramType = paramTypes[2];
+
+            if (paramType == int.class) {
+                return Integer.parseInt(s);
+            }
+
+            if (paramType == RegisterName.class) {
+                return Registers.Register.valueOf(s);
+            }
+
+            if (paramType == String.class) {
+                return s;
             }
         }
 
-        return convertedArgs;
-    }
-
-    private boolean isInteger(String str) {
-        if (str == null) {
-            return false;
-        }
-        int length = str.length();
-        if (length == 0) {
-            return false;
-        }
-        int i = 0;
-        if (str.charAt(0) == '-') {
-            if (length == 1) {
-                return false;
-            }
-            i = 1;
-        }
-        for (; i < length; i++) {
-            char c = str.charAt(i);
-            if (c < '0' || c > '9') {
-                return false;
-            }
-        }
-        return true;
+        return null;
     }
 
     protected String getClassNameFromOpcode(String opcode) {
-        return "sml.instruction." + opcode.substring(0,1).toUpperCase() + opcode.substring(1) + "Instruction";
+        return "sml.instruction." + opcode.substring(0, 1).toUpperCase() + opcode.substring(1) + "Instruction";
     }
-
 
     private String getLabel() {
         String word = scan();
