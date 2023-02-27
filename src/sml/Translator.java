@@ -6,7 +6,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
+import java.util.stream.Stream;
+
+import sml.Registers.Register;
 
 /**
  * This class ....
@@ -71,21 +75,16 @@ public final class Translator {
         String s = scan();
 
         try {
-            Class<Instruction> insClass;
-            insClass = (Class<Instruction>) Class.forName(getClassNameFromOpcode(opcode));
-            Constructor<?> constructor = insClass.getDeclaredConstructors()[0];
+            Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
+            Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
+            Object[] args = {label, "test", null};
+            Stream.of(constructor.getParameterTypes())
+                    .map(Class::getName)
+                    .forEach(System.out::println);
 
-            var registerParam = Registers.Register.valueOf(r);
-            var thirdParam = getOptionalThirdParam(s, constructor.getParameterTypes());
-            Object[] args = {label, registerParam, thirdParam};
-
-            // still not quite open to extension but closed for modification.
-            // e.g a new instruction with one param would require this code to modified.
-            if (constructor.getParameterCount() < 3) {
-                return (Instruction) constructor.newInstance(label, registerParam);
-            }
 
             return (Instruction) constructor.newInstance(args);
+
 
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
