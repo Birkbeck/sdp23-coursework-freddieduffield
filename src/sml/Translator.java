@@ -6,9 +6,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Stream;
+import java.util.stream.IntStream;
 
 import sml.Registers.Register;
 
@@ -71,43 +70,33 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        String r = scan();
-        String s = scan();
 
         try {
             Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
             Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
-            Object[] args = {label, "test", null};
-            Stream.of(constructor.getParameterTypes())
-                    .map(Class::getName)
-                    .forEach(System.out::println);
+            Object[] args = IntStream.range(0, constructor.getParameterCount())
+                    .mapToObj(i -> {
+                        String paramName = constructor.getParameterTypes()[i].getName();
+                        if (i == 0) {
+                            return label;
+                        }
 
+                        if (paramName == "sml.RegisterName") {
+                            return Register.valueOf(scan());
+                        }
+
+                        if (paramName == "int") {
+                            return Integer.parseInt(scan());
+                        }
+
+                        return scan();
+                    }).toArray();
 
             return (Instruction) constructor.newInstance(args);
 
 
         } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    private Object getOptionalThirdParam(String s, Class<?>[] paramTypes) {
-        if (paramTypes.length > 2) {
-            Class<?> paramType = paramTypes[2];
-
-            if (paramType == int.class) {
-                return Integer.parseInt(s);
-            }
-
-            if (paramType == RegisterName.class) {
-                return Registers.Register.valueOf(s);
-            }
-
-            if (paramType == String.class) {
-                return s;
-            }
         }
 
         return null;
