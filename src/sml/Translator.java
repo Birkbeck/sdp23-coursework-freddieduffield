@@ -5,12 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * This class ....
@@ -74,17 +70,6 @@ public final class Translator {
         String r = scan();
         String s = scan();
 
-//      inputs: Reads from file / arguments
-//      String label
-//      String opcode
-//      String registerName
-//      String registerName or String number or String label
-
-//      Constructor Params
-//      1st param: String label (no conversion required)
-//      2nd param: RegisterName
-//      3rd param: null or String label or Int number
-
         try {
             Class<Instruction> insClass;
             insClass = (Class<Instruction>) Class.forName(getClassNameFromOpcode(opcode));
@@ -94,8 +79,6 @@ public final class Translator {
             var thirdParam = getOptionalThirdParam(s, constructor.getParameterTypes());
             Object[] args = {label, registerParam, thirdParam};
 
-            System.out.println("------------------");
-            System.out.println(constructor.getName());
             // still not quite open to extension but closed for modification.
             // e.g a new instruction with one param would require this code to modified.
             if (constructor.getParameterCount() < 3) {
