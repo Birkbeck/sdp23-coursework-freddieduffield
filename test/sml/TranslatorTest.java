@@ -1,15 +1,43 @@
 package sml;
 
 import org.junit.jupiter.api.*;
+import sml.instruction.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static sml.Registers.Register.*;
 
 public class TranslatorTest {
     Translator t;
+    Labels l = new Labels();
+    List<Instruction> p = new ArrayList<>();
+    List<Instruction> test1ExpectedProgram = List.of(
+            new MovInstruction("L1", EAX, 66),
+            new MovInstruction(null, EBX, 10),
+            new AddInstruction(null, EAX, EAX),
+            new MulInstruction(null, EAX, EBX),
+            new OutInstruction(null, EAX),
+            new JnzInstruction(null, EAX, "L1")
+    );
+    Labels expectedL = new Labels();
 
     @BeforeEach
     void setup() {
-        t = new Translator("TEST");
+        t = new Translator("test1.sml");
+        expectedL.addLabel("L1", 0);
     }
 
+    @Test
+    @DisplayName("Translator")
+    void testTranslator1() throws IOException {
+            t.readAndTranslate(l, p);
+            Assertions.assertEquals(test1ExpectedProgram, p);
+            Assertions.assertEquals(expectedL, l);
+    }
+
+    // Tests for getClassNameFromOpcode method
     @Test
     @DisplayName("getClassNameFromOpcode name for mov")
     void testGetClassName1() {
