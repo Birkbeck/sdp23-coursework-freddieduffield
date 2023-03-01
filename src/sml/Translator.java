@@ -2,21 +2,18 @@ package sml;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
-import sml.Registers.Register;
 
 /**
- * This class ....
+ * This class contains the method needed to read a program file translate it into Instruction classes
+ * and stores them in the list.
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Freddie Duffield et al
  */
 public final class Translator {
 
@@ -53,9 +50,6 @@ public final class Translator {
         }
     }
 
-    // TODO: Next, use dependency injection to allow this machine class
-    //   to work with different sets of opcodes (different CPUs)
-
     /**
      * Translates the current line into an instruction with the given label
      *
@@ -75,9 +69,18 @@ public final class Translator {
 
         InstructionFactory factory = InstructionFactory.getInstance();
 
-        factory.createInstruction(opcode, label, r, s);
-        return factory.getInstruction();
+        return factory.createInstruction(opcode, label, r, s)
+                .getInstruction();
     }
+
+
+    /**
+     *
+     * Takes an opcode and build the class name and packages for an instruction class
+     *
+     * @param opcode
+     * @return String of the class name with package path prefix
+     */
 
     protected String getClassNameFromOpcode(String opcode) {
         return "sml.instruction." + opcode.substring(0, 1).toUpperCase() + opcode.substring(1) + "Instruction";
