@@ -70,36 +70,13 @@ public final class Translator {
             return null;
 
         String opcode = scan();
+        String r = scan();
+        String s = scan();
 
-        try {
-            Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
-            Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
-            Object[] args = IntStream.range(0, constructor.getParameterCount())
-                    .mapToObj(i -> {
-                        String paramName = constructor.getParameterTypes()[i].getName();
-                        if (i == 0) {
-                            return label;
-                        }
+        InstructionFactory factory = InstructionFactory.getInstance();
 
-                        if (paramName == "sml.RegisterName") {
-                            return Register.valueOf(scan());
-                        }
-
-                        if (paramName == "int") {
-                            return Integer.parseInt(scan());
-                        }
-
-                        return scan();
-                    }).toArray();
-
-            return (Instruction) constructor.newInstance(args);
-
-
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        factory.createInstruction(opcode, label, r, s);
+        return factory.getInstruction();
     }
 
     protected String getClassNameFromOpcode(String opcode) {
