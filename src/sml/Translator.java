@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.IntStream;
 
@@ -43,7 +45,9 @@ public final class Translator {
                 line = sc.nextLine();
                 String label = getLabel();
 
-                Instruction instruction = getInstruction(label);
+                int argumentCount = line.split("\\s+").length;
+
+                Instruction instruction = getInstruction(label, argumentCount);
                 if (instruction != null) {
                     if (label != null)
                         labels.addLabel(label, program.size());
@@ -59,45 +63,66 @@ public final class Translator {
     /**
      * Translates the current line into an instruction with the given label
      *
-     * @param label the instruction label
+     * @param label         the instruction label
+     * @param argumentCount
      * @return the new instruction
      * <p>
      * The input line should consist of a single SML instruction,
      * with its label already removed.
      */
-    private Instruction getInstruction(String label) {
+    private Instruction getInstruction(String label, int argumentCount) {
         if (line.isEmpty())
             return null;
+
 
         String opcode = scan();
 
         try {
             Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
             Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
-            Object[] args = IntStream.range(0, constructor.getParameterCount())
-                    .mapToObj(i -> {
-                        String paramName = constructor.getParameterTypes()[i].getName();
-                        if (i == 0) {
-                            return label;
-                        }
-
-                        if (paramName == "sml.RegisterName") {
-                            return Register.valueOf(scan());
-                        }
-
-                        if (paramName == "int") {
-                            return Integer.parseInt(scan());
-                        }
-
-                        return scan();
-                    }).toArray();
-
-            return (Instruction) constructor.newInstance(args);
-
-
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            Object[] parameterObjs = new Object[argumentCount];
+            // get the candidate constructor parameters
+            Class<?>[] paramCons = constructor.getParameterTypes();
+            for (int i = 0; i < argumentCount; i++) {
+                // attempt to type the parameters using any available string constructors
+                // NoSuchMethodException will be thrown where retyping isn't possible
+                Class<?> c = toWrapper(paramCons[i]);
+                parameterObjs[i] = c.getConstructor(String.class).newInstance(scan());
+            }
+            // return instance ob object using the successful constructor
+            // and parameters of the right class types.
+            return (Instruction) constructor.newInstance(parameterObjs);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
+//        try {
+//            Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
+//            Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
+//            Object[] args = IntStream.range(0, constructor.getParameterCount())
+//                    .mapToObj(i -> {
+//                        String paramName = constructor.getParameterTypes()[i].getName();
+//                        if (i == 0) {
+//                            return label;
+//                        }
+//
+//                        if (paramName == "sml.RegisterName") {
+//                            return Register.valueOf(scan());
+//                        }
+//
+//                        if (paramName == "int") {
+//                            return Integer.parseInt(scan());
+//                        }
+//
+//                        return scan();
+//                    }).toArray();
+//
+//            return (Instruction) constructor.newInstance(args);
+//
+//
+//        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
 
         return null;
     }
@@ -131,5 +156,27 @@ public final class Translator {
             }
 
         return line;
+    }
+
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_TYPE_WRAPPERS = Map.of(
+            int.class, Integer.class,
+            long.class, Long.class,
+            boolean.class, Boolean.class,
+            byte.class, Byte.class,
+            char.class, Character.class,
+            float.class, Float.class,
+            double.class, Double.class,
+            short.class, Short.class,
+            void.class, Void.class
+    );
+
+    /**
+     * Return the correct Wrapper class if testClass is primitive
+     *
+     * @param testClass class being tested
+     * @return Object class or testClass
+     */
+    private static Class<?> toWrapper(Class<?> testClass) {
+        return PRIMITIVE_TYPE_WRAPPERS.getOrDefault(testClass, testClass);
     }
 }
