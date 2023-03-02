@@ -1,9 +1,12 @@
 package sml;
 
-// TODO: write a JavaDoc for the class
 
 /**
  * Represents an abstract instruction.
+ * An instruction consists of an optional label,
+ * a mandatory opcode and a number of operands.
+ * The central method that must be overridden in subclass is execute.
+ * It also contains a static field that contains the value of normal program counter update.
  *
  * @author ...
  */
