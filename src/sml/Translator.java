@@ -102,13 +102,6 @@ public final class Translator {
                 return new JnzInstruction(label, Register.valueOf(s), l);
             }
 
-            // TODO: add code for all other types of instructions
-
-            // TODO: Then, replace the switch by using the Reflection API
-
-            // TODO: Next, use dependency injection to allow this machine class
-            //       to work with different sets of opcodes (different CPUs)
-
             default -> {
                 System.out.println("Unknown instruction: " + opcode);
             }
