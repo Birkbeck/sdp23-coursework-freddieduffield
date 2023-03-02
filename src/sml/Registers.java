@@ -3,11 +3,13 @@ package sml;
 import java.util.*;
 import java.util.stream.Collectors;
 
-// TODO: write a JavaDoc for the class
-
 /**
  *
- * @author ...
+ * This class contains the details of the Registers.
+ * Registers constants contained in an enum that implements the interface RegisterName.
+ * Contains functionality to clear registers and store values in the register.
+ *
+ * @author Freddie Duffield
  */
 public final class Registers {
     private final Map<Register, Integer> registers = new HashMap<>();
@@ -45,8 +47,6 @@ public final class Registers {
         return registers.get((Register)register);
     }
 
-    // TODO: use pattern matching for instanceof
-    // https://docs.oracle.com/en/java/javase/14/language/pattern-matching-instanceof-operator.html
     @Override
     public boolean equals(Object o) {
         if (o instanceof Registers r) {
