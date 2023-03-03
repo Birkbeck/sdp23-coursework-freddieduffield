@@ -38,7 +38,7 @@ public class MulInstructionTest {
     @DisplayName("Multiply negative and positive integer and store them in the given register: 5 * -5")
     void executeValidTwo() {
         registers.set(EAX, -5);
-        registers.set(EBX, -5);
+        registers.set(EBX, 5);
         Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
         Assertions.assertEquals(-25, machine.getRegisters().get(EAX));
