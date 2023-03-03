@@ -31,7 +31,7 @@ class AddInstructionTest {
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(11, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(11, registers.get(EAX));
   }
 
   @Test
@@ -41,7 +41,7 @@ class AddInstructionTest {
     registers.set(EBX, 6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(1, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(1, registers.get(EAX));
   }
 
   @Test
@@ -51,6 +51,6 @@ class AddInstructionTest {
     registers.set(EBX, -6);
     Instruction instruction = new AddInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-11, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(-11, registers.get(EAX));
   }
 }
