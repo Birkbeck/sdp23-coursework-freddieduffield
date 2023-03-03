@@ -3,7 +3,10 @@ package sml.instruction;
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
+<<<<<<< HEAD
 import sml.Registers.Register;
+=======
+>>>>>>> master
 
 import java.util.Objects;
 
@@ -24,6 +27,13 @@ public class MovInstruction extends Instruction {
         this.value = value;
     }
 
+    /**
+     *
+     * This method places a given value in a register address.
+     *
+     * @param machine the machine the instruction runs on
+     * @return a normal program counter update
+     */
     @Override
     public int execute(Machine machine) {
         machine.getRegisters().set(register, value);

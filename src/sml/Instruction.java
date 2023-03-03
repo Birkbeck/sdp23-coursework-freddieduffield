@@ -1,11 +1,11 @@
 package sml;
 
-// TODO: write a JavaDoc for the class
-
 /**
- * Represents an abstract instruction.
+ * Represents an abstract instruction. It has fields of label and opcode
+ * The key abstract method to be overwritten is execute.
+ * It contains a constant for normal program counter updates
  *
- * @author ...
+ * @author Freddie Duffield et al
  */
 public abstract class Instruction {
 	protected final String label;
@@ -48,12 +48,11 @@ public abstract class Instruction {
 		return (getLabel() == null) ? "   " : getLabel() + ": ";
 	}
 
-	// TODO: What does abstract in the declaration below mean?
-	//       (Write a short explanation.)
+	// What does abstract in the declaration below mean?
+	// It means that body of method must be implemented in the subclasses of this class.
 	@Override
 	public abstract String toString();
 
-	// TODO: Make sure that subclasses also implement equals and hashCode (needed in class Machine).
 	@Override
 	public abstract boolean equals(Object obj);
 

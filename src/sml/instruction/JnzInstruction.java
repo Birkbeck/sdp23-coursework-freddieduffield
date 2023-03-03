@@ -3,10 +3,14 @@ package sml.instruction;
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
-import sml.Registers.Register;
 
 import java.util.Objects;
 
+/**
+ * This class provides functionality for jump operation.
+ * This means given a register location and label as operands it jumps the program counter to specified label
+ * if the register is not empty
+ */
 public class JnzInstruction extends Instruction {
     private final String nextLabel;
     private final RegisterName source;
@@ -19,6 +23,15 @@ public class JnzInstruction extends Instruction {
         this.source = source;
     }
 
+
+    /**
+     *
+     * Based on a given register lookup - if the register is not 0 the program counter
+     * then the address of the register is return otherwise the program counter is updated as normal
+     *
+     * @param machine the machine the instruction runs on
+     * @return either a normal program counter update or the address of the label
+     */
     @Override
     public int execute(Machine machine) {
         return machine.getRegisters().get(source) != 0
@@ -28,7 +41,7 @@ public class JnzInstruction extends Instruction {
 
     @Override
     public String toString() {
-        return "    " + getOpcode() + " " + source + " " + nextLabel;
+        return getLabelString() + getOpcode() + " " + source + " " + nextLabel;
     }
 
     @Override
