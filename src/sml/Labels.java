@@ -23,13 +23,8 @@ public final class Labels {
 	 */
 	public void addLabel(String label, int address) {
 		Objects.requireNonNull(label);
-		if (!isUnique(label)) return;
+		// TODO: Add a check that there are no label duplicates.
 		labels.put(label, address);
-	}
-
-	private boolean isUnique(String label) {
-		return labels.keySet().stream()
-				.noneMatch(l -> l.equals(label));
 	}
 
 	/**
