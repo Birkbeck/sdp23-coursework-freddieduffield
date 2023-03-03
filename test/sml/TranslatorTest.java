@@ -107,5 +107,17 @@ public class TranslatorTest {
         Assertions.assertEquals(expectedAddProgram, program);
     }
 
+    @Test
+    @DisplayName("Out")
+    void testOut() throws IOException {
+        List<Instruction> expectedAddProgram = List.of(new OutInstruction(null, EAX));
+        registers.set(EAX, 10);
+
+        translator = new Translator("testOUT.sml");
+        translator.readAndTranslate(labels, program);
+
+        Assertions.assertEquals(expectedAddProgram, program);
+    }
+
 
 }
