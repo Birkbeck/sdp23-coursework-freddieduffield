@@ -1,10 +1,7 @@
 package sml;
 
 import org.junit.jupiter.api.*;
-import sml.instruction.AddInstruction;
-import sml.instruction.DivInstruction;
-import sml.instruction.MulInstruction;
-import sml.instruction.SubInstruction;
+import sml.instruction.*;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,6 +27,8 @@ public class TranslatorTest {
     void tearDown() {
         machine = null;
         registers = null;
+        program = null;
+        labels = null;
     }
 
     @Test
@@ -75,10 +74,22 @@ public class TranslatorTest {
     @DisplayName("Divide")
     void testDivide() throws IOException {
         List<Instruction> expectedAddProgram = List.of(new DivInstruction(null, EAX, EBX));
-        registers.set(EAX, 9);
+        registers.set(EAX,0);
         registers.set(EBX, 3);
 
-        translator = new Translator("testDiv.sml");
+        translator = new Translator("testDIV.sml");
+        translator.readAndTranslate(labels, program);
+
+        Assertions.assertEquals(expectedAddProgram, program);
+    }
+
+    @Test
+    @DisplayName("Move")
+    void testMov() throws IOException {
+        List<Instruction> expectedAddProgram = List.of(new MovInstruction(null, EAX, 10));
+        registers.set(EAX, 10);
+
+        translator = new Translator("testMOV.sml");
         translator.readAndTranslate(labels, program);
 
         Assertions.assertEquals(expectedAddProgram, program);
