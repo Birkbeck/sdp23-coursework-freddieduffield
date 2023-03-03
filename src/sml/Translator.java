@@ -2,21 +2,18 @@ package sml;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
-import sml.Registers.Register;
 
 /**
- * This class ....
+ * This class contains the method needed to read a program file translate it into Instruction classes
+ * and stores them in the list.
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Freddie Duffield et al
  */
 public final class Translator {
 
@@ -53,9 +50,6 @@ public final class Translator {
         }
     }
 
-    // TODO: Next, use dependency injection to allow this machine class
-    //   to work with different sets of opcodes (different CPUs)
-
     /**
      * Translates the current line into an instruction with the given label
      *
@@ -70,37 +64,23 @@ public final class Translator {
             return null;
 
         String opcode = scan();
+        String r = scan();
+        String s = scan();
 
-        try {
-            Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
-            Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
-            Object[] args = IntStream.range(0, constructor.getParameterCount())
-                    .mapToObj(i -> {
-                        String paramName = constructor.getParameterTypes()[i].getName();
-                        if (i == 0) {
-                            return label;
-                        }
+        InstructionFactory factory = InstructionFactory.getInstance();
 
-                        if (paramName == "sml.RegisterName") {
-                            return Register.valueOf(scan());
-                        }
-
-                        if (paramName == "int") {
-                            return Integer.parseInt(scan());
-                        }
-
-                        return scan();
-                    }).toArray();
-
-            return (Instruction) constructor.newInstance(args);
-
-
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return factory.createInstruction(opcode, label, r, s)
+                .getInstruction();
     }
+
+
+    /**
+     *
+     * Takes an opcode and build the class name and packages for an instruction class
+     *
+     * @param opcode
+     * @return String of the class name with package path prefix
+     */
 
     protected String getClassNameFromOpcode(String opcode) {
         return "sml.instruction." + opcode.substring(0, 1).toUpperCase() + opcode.substring(1) + "Instruction";
