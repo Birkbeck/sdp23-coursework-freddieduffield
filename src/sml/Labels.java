@@ -41,9 +41,9 @@ public final class Labels {
      * @return the address the label refers to
      */
     public int getAddress(String label) throws NullPointerException {
-        // TODO: Where can NullPointerException be thrown here?
-        //       (Write an explanation.)
-        // A NullPointerException could be thrown here if the there is no label store
+        // A NullPointerException could be thrown here if the there is no label has been stored for the given string
+        // This could occur if the value of a label that was attempted to be added was not unique and therefore not added
+        // during the call in Translator readAndTranslate
         if (!labels.containsKey(label)) {
             throw new NullPointerException();
         }
