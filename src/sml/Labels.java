@@ -21,10 +21,10 @@ public final class Labels {
      * @param label   the label
      * @param address the address the label refers to
      */
-    public void addLabel(String label, int address) throws NullPointerException {
+    public void addLabel(String label, int address) {
         Objects.requireNonNull(label);
 
-        if (isUnique(label)) throw new NullPointerException();
+        if (!isUnique(label)) return;
 
         labels.put(label, address);
     }
