@@ -2,6 +2,7 @@ package sml;
 
 import org.junit.jupiter.api.*;
 import sml.instruction.AddInstruction;
+import sml.instruction.DivInstruction;
 import sml.instruction.MulInstruction;
 import sml.instruction.SubInstruction;
 
@@ -69,4 +70,19 @@ public class TranslatorTest {
 
         Assertions.assertEquals(expectedAddProgram, program);
     }
+
+    @Test
+    @DisplayName("Divide")
+    void testDivide() throws IOException {
+        List<Instruction> expectedAddProgram = List.of(new DivInstruction(null, EAX, EBX));
+        registers.set(EAX, 9);
+        registers.set(EBX, 3);
+
+        translator = new Translator("testDiv.sml");
+        translator.readAndTranslate(labels, program);
+
+        Assertions.assertEquals(expectedAddProgram, program);
+    }
+
+
 }
