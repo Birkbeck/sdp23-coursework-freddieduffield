@@ -10,7 +10,7 @@ public class MulInstruction extends Instruction {
     private final RegisterName result;
     private final RegisterName source;
 
-    public static final String OP_CODE = "sub";
+    public static final String OP_CODE = "mul";
 
     public MulInstruction(String label, RegisterName result, RegisterName source) {
         super(label, OP_CODE);
