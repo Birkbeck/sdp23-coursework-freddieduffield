@@ -2,6 +2,7 @@ package sml;
 
 import org.junit.jupiter.api.*;
 import sml.instruction.AddInstruction;
+import sml.instruction.MulInstruction;
 import sml.instruction.SubInstruction;
 
 import java.io.IOException;
@@ -51,6 +52,19 @@ public class TranslatorTest {
         registers.set(EBX, 8);
 
         translator = new Translator("testSUB.sml");
+        translator.readAndTranslate(labels, program);
+
+        Assertions.assertEquals(expectedAddProgram, program);
+    }
+
+    @Test
+    @DisplayName("Multiply")
+    void testMultiply() throws IOException {
+        List<Instruction> expectedAddProgram = List.of(new MulInstruction(null, EAX, EBX));
+        registers.set(EAX, 3);
+        registers.set(EBX, 8);
+
+        translator = new Translator("testMUL.sml");
         translator.readAndTranslate(labels, program);
 
         Assertions.assertEquals(expectedAddProgram, program);
