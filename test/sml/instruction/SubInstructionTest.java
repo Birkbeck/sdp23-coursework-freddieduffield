@@ -31,7 +31,7 @@ class SubInstructionTest {
     registers.set(EBX, 5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(3, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(3, registers.get(EAX));
   }
 
   @Test
@@ -41,7 +41,7 @@ class SubInstructionTest {
     registers.set(EBX, -5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(13, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(13, registers.get(EAX));
   }
 
   @Test
@@ -51,7 +51,7 @@ class SubInstructionTest {
     registers.set(EBX, 5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-13, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(-13, registers.get(EAX));
   }
 
   @Test
@@ -61,6 +61,6 @@ class SubInstructionTest {
     registers.set(EBX, -5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
     instruction.execute(machine);
-    Assertions.assertEquals(-3, machine.getRegisters().get(EAX));
+    Assertions.assertEquals(-3, registers.get(EAX));
   }
 }
