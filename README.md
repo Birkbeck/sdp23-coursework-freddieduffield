@@ -1,5 +1,7 @@
 # Simple (Small) Machine Language (SML)
 
+> Note to Reader: `master` branch contains my first attempt at both Parts 1 and 2. The branch called `part 2` contains part 2.1. The branch call `part-2.2-dependency-injection` contains part 2.2. Following the discussion on Thursday 3rd March and the earlier realisation that I had not read the tasks section of this readme correctly made a mess I decided to re-attempt using to regular commit process to see if it improve my code. For this rich commit history please see the branch `rich-commit-history`. The main difference, besides the commit history, is improved translator tests. 
+
 ### A coursework examining reflection and dependency injection
 
 + This assignment is to be completed **individually**.
