@@ -3,10 +3,6 @@ package sml.instruction;
 import sml.Instruction;
 import sml.Machine;
 import sml.RegisterName;
-<<<<<<< HEAD
-import sml.Registers.Register;
-=======
->>>>>>> master
 
 import java.util.Objects;
 
