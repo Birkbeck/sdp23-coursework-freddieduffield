@@ -2,6 +2,7 @@ package sml.instruction;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import sml.Instruction;
 import sml.Machine;
@@ -25,6 +26,7 @@ public class OutInstructionTest {
     }
 
     @Test
+    @DisplayName("Prints the contents of register")
     void validExecution() {
         registers.set(EBX, 8);
         Instruction instruction = new OutInstruction(null, EBX);
