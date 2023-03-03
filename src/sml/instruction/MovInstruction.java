@@ -10,10 +10,10 @@ public class MovInstruction extends Instruction {
     private RegisterName register;
     private int value;
 
-    public static final String OPP_CODE = "mov";
+    public static final String OP_CODE = "mov";
 
     public MovInstruction(String label, RegisterName register, int value) {
-        super(label, OPP_CODE);
+        super(label, OP_CODE);
         this.register = register;
         this.value = value;
     }
