@@ -95,5 +95,17 @@ public class TranslatorTest {
         Assertions.assertEquals(expectedAddProgram, program);
     }
 
+    @Test
+    @DisplayName("Jump")
+    void testJNZ() throws IOException {
+        List<Instruction> expectedAddProgram = List.of(new JnzInstruction(null, EAX, "label"));
+        registers.set(EAX, 10);
+
+        translator = new Translator("testJNZ.sml");
+        translator.readAndTranslate(labels, program);
+
+        Assertions.assertEquals(expectedAddProgram, program);
+    }
+
 
 }
