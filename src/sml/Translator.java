@@ -1,14 +1,15 @@
 package sml;
 
-import sml.instruction.*;
-
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
-import static sml.Registers.Register;
+import sml.Registers.Register;
 
 /**
  * This class ....
@@ -25,7 +26,7 @@ public final class Translator {
     private String line = "";
 
     public Translator(String fileName) {
-        this.fileName =  fileName;
+        this.fileName = fileName;
     }
 
     // translate the small program in the file into lab (the labels) and
@@ -52,6 +53,9 @@ public final class Translator {
         }
     }
 
+    // TODO: Next, use dependency injection to allow this machine class
+    //   to work with different sets of opcodes (different CPUs)
+
     /**
      * Translates the current line into an instruction with the given label
      *
@@ -66,49 +70,41 @@ public final class Translator {
             return null;
 
         String opcode = scan();
-        switch (opcode) {
-            case AddInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new AddInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case SubInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new SubInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MulInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new MulInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case DivInstruction.OP_CODE -> {
-                String r = scan();
-                String s = scan();
-                return new DivInstruction(label, Register.valueOf(r), Register.valueOf(s));
-            }
-            case MovInstruction.OPP_CODE -> {
-                String r = scan();
-                String v = scan();
-                return new MovInstruction(label, Register.valueOf(r), Integer.parseInt(v));
-            }
-            case OutInstruction.OP_CODE -> {
-                String s = scan();
-                return new OutInstruction(label, Register.valueOf(s));
-            }
-            case JnzInstruction.OPP_CODE -> {
-                String s = scan();
-                String l = scan();
-                return new JnzInstruction(label, Register.valueOf(s), l);
-            }
 
-            default -> {
-                System.out.println("Unknown instruction: " + opcode);
-            }
+        try {
+            Class<?> instructionClass = Class.forName(getClassNameFromOpcode(opcode));
+            Constructor<?> constructor = instructionClass.getDeclaredConstructors()[0];
+            Object[] args = IntStream.range(0, constructor.getParameterCount())
+                    .mapToObj(i -> {
+                        String paramName = constructor.getParameterTypes()[i].getName();
+                        if (i == 0) {
+                            return label;
+                        }
+
+                        if (paramName == "sml.RegisterName") {
+                            return Register.valueOf(scan());
+                        }
+
+                        if (paramName == "int") {
+                            return Integer.parseInt(scan());
+                        }
+
+                        return scan();
+                    }).toArray();
+
+            return (Instruction) constructor.newInstance(args);
+
+
+        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 
+    protected String getClassNameFromOpcode(String opcode) {
+        return "sml.instruction." + opcode.substring(0, 1).toUpperCase() + opcode.substring(1) + "Instruction";
+    }
 
     private String getLabel() {
         String word = scan();
