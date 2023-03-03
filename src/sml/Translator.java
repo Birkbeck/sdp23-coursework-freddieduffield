@@ -11,7 +11,10 @@ import java.util.Scanner;
 import static sml.Registers.Register;
 
 /**
- * This class ....
+ * This class on contains the functionality to read and translate a program from a file.
+ * It translates the string instructions into classes and stores in a given program list.
+ *
+ *
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
