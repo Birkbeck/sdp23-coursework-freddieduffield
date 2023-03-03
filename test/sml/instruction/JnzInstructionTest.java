@@ -22,7 +22,7 @@ public class JnzInstructionTest {
     }
 
     @Test
-    @DisplayName("When source register > 0, moves to label address")
+    @DisplayName("When source register > 0, returns label address")
     void validExecution() {
         registers.set(EAX, 3);
         Instruction instruction = new JnzInstruction(null, EAX, "t1");
