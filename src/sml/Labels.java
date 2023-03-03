@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-// TODO: write a JavaDoc for the class
-
 /**
  *
- * @author ...
+ *  Class that holds a reference to labels names and addresses.
+ *  As such it contains methods that enable lookup of label addresses
+ *  and to set addresses.
+ *
+ * @author Freddie Duffield
  */
 public final class Labels {
 	private final Map<String, Integer> labels = new HashMap<>();
