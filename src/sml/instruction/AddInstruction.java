@@ -6,10 +6,13 @@ import sml.RegisterName;
 
 import java.util.Objects;
 
-// TODO: write a JavaDoc for the class
-
 /**
- * @author
+ *
+ * This class represents an addition instruction.
+ * It takes two register names as operands and adds them together
+ * in the override of the execute method. A normal program counter update is returned
+ *
+ * @author Freddie Duffield
  */
 
 public class AddInstruction extends Instruction {
