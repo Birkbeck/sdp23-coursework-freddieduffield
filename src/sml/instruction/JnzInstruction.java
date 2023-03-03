@@ -44,7 +44,8 @@ public class JnzInstruction extends Instruction {
         if (o instanceof JnzInstruction ins) {
             return Objects.equals(nextLabel, ins.nextLabel)
                     && Objects.equals(source, ins.source)
-                    && Objects.equals(label, ins.label);
+                    && Objects.equals(label, ins.label)
+                    && Objects.equals(opcode, ins.opcode);
         }
         return false;
     }
