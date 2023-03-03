@@ -30,6 +30,6 @@ public class OutInstructionTest {
         registers.set(EBX, 8);
         Instruction instruction = new OutInstruction(null, EBX);
         instruction.execute(machine);
-        Assertions.assertEquals("Register EBX: \n8", outputStreamCaptor.toString().trim());
+        Assertions.assertEquals("8", outputStreamCaptor.toString().trim());
     }
 }
