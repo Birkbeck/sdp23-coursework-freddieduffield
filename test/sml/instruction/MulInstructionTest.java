@@ -31,7 +31,7 @@ public class MulInstructionTest {
         registers.set(EBX, 5);
         Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
-        Assertions.assertEquals(25, machine.getRegisters().get(EAX));
+        Assertions.assertEquals(25, registers.get(EAX));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class MulInstructionTest {
         registers.set(EBX, 5);
         Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
-        Assertions.assertEquals(-25, machine.getRegisters().get(EAX));
+        Assertions.assertEquals(-25, registers.get(EAX));
     }
 
     @Test
@@ -51,6 +51,6 @@ public class MulInstructionTest {
         registers.set(EBX, -5);
         Instruction instruction = new MulInstruction(null, EAX, EBX);
         instruction.execute(machine);
-        Assertions.assertEquals(25, machine.getRegisters().get(EAX));
+        Assertions.assertEquals(25, registers.get(EAX));
     }
 }
