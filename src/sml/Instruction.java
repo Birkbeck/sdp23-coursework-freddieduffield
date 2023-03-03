@@ -51,8 +51,8 @@ public abstract class Instruction {
 		return (getLabel() == null) ? "" : getLabel() + ": ";
 	}
 
-	// TODO: What does abstract in the declaration below mean?
-	//       (Write a short explanation.)
+	// abstract in this context means that the method body will need to be defined in each of the subclasses
+	// that extend this class. It is only possible to declare an abstract method in an abstract class.
 	@Override
 	public abstract String toString();
 
