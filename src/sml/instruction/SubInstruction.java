@@ -33,10 +33,13 @@ public class SubInstruction extends Instruction {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        SubInstruction that = (SubInstruction) o;
-        return Objects.equals(result, that.result) && Objects.equals(source, that.source);
+        if (o instanceof SubInstruction ins) {
+            return Objects.equals(this.opcode, ins.opcode)
+                    && Objects.equals(this.label, ins.label)
+                    && Objects.equals(result, ins.result)
+                    && Objects.equals(source, ins.source);
+        }
+        return false;
     }
 
     @Override
