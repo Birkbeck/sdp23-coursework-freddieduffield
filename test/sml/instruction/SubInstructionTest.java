@@ -46,7 +46,7 @@ class SubInstructionTest {
 
   @Test
   @DisplayName("It should subtract a positive from a negative integer and store them in the given register: -8 - 5")
-  void executeValidTwo() {
+  void executeValidThree() {
     registers.set(EAX, -8);
     registers.set(EBX, 5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
@@ -56,7 +56,7 @@ class SubInstructionTest {
 
   @Test
   @DisplayName("It should subtract two negative integers and store them in the given register: -5 - -6")
-  void executeValidThree() {
+  void executeValidFour() {
     registers.set(EAX, -8);
     registers.set(EBX, -5);
     Instruction instruction = new SubInstruction(null, EAX, EBX);
