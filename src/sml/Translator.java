@@ -14,11 +14,10 @@ import static sml.Registers.Register;
  * This class on contains the functionality to read and translate a program from a file.
  * It translates the string instructions into classes and stores in a given program list.
  *
- *
  * <p>
  * The translator of a <b>S</b><b>M</b>al<b>L</b> program.
  *
- * @author ...
+ * @author Freddie Duffield
  */
 public final class Translator {
 
@@ -95,9 +94,11 @@ public final class Translator {
                 String s = scan();
                 return new MovInstruction(label, Register.valueOf(r), Integer.parseInt(s));
             }
-
-            // TODO: add code for all other types of instructions
-
+            case JnzInstruction.OP_CODE -> {
+                String r = scan();
+                String s = scan();
+                return new JnzInstruction(label, Register.valueOf(r), s);
+            }
             // TODO: Then, replace the switch by using the Reflection API
 
             // TODO: Next, use dependency injection to allow this machine class
